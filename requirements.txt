@@ -1,5 +1,5 @@
-Flask
-python-dotenv
-requests
-openai   # or groq sdk if using Groq
+flask
 gunicorn
+requests
+python-dotenv
+openai
