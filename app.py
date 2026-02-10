@@ -1,23 +1,24 @@
-from flask import Flask, request, render_template, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
+from agent import agent
+import os
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__, static_folder=".")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Root route – Railway needs this
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
 @app.route("/")
 def home():
-    return render_template("index.html")  # your frontend file
+    return render_template("index.html")
 
-# API route
 @app.route("/ask", methods=["POST"])
 def ask():
-    prompt = request.form.get("prompt")
-    return jsonify({"response": prompt})
-@app.route("/health")
-def health():
-    return "OK", 200
-
+    prompt = request.json["prompt"]
+    response = agent(prompt)
+    return jsonify({"response": response})
 
 if __name__ == "__main__":
-    import os
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
+    app.run(port=8000, debug=True)
