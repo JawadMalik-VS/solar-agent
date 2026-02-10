@@ -1,19 +1,21 @@
-from flask import Flask, request, jsonify, send_from_directory
-from mySolarAgent.agent import agent
-import os
+from flask import Flask, request, render_template, jsonify
 
-app = Flask(__name__, static_folder=".")
+app = Flask(__name__)
 
+# Root route – Railway needs this
 @app.route("/")
 def home():
-    return send_from_directory(".", "index.html")
+    return render_template("index.html")  # your frontend file
 
+# API route
 @app.route("/ask", methods=["POST"])
 def ask():
-    prompt = request.json["prompt"]
-    response = agent(prompt)
+    prompt = request.form.get("prompt")
+    # call your agent logic here
+    response = "Agent response: " + prompt
     return jsonify({"response": response})
 
 if __name__ == "__main__":
+    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
