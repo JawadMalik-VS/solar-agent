@@ -12,6 +12,10 @@ def home():
 def ask():
     prompt = request.form.get("prompt")
     return jsonify({"response": prompt})
+@app.route("/health")
+def health():
+    return "OK", 200
+
 
 if __name__ == "__main__":
     import os
