@@ -6,7 +6,7 @@
   "deploy": {
     "runtime": "V2",
     "numReplicas": 1,
-    "startCommand": "python app.py",
+    "startCommand": "gunicorn app:app --bind 0.0.0.0:$PORT",
     "sleepApplication": false,
     "useLegacyStacker": false,
     "multiRegionConfig": {
